@@ -41,9 +41,9 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 
 var bot = new builder.UniversalBot(connector, [
     function (session) {
-        session.say("Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.");
+        session.say("Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.", "Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.");
         builder.Prompts.text(session, 'What is your name?', {                                    
-            speak: 'What is name?',                                               
+            speak: 'What is your name?',                                               
             retrySpeak: "I'm sorry, please repeat your name",  
             inputHint: builder.InputHint.expectingInput                                              
         });
