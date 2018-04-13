@@ -123,7 +123,8 @@ var bot = new builder.UniversalBot(connector, [
     session.send(arr)
 
     var index_of_fail = allTheCrap.indexOf(arr[0])
-    session.send("" + arr + " " + index_of_fail)
+    session.send("" + arr + " " + allTheCrap.substring(index_of_fail-20,index_of_fail+20)
+
 
 
 },
