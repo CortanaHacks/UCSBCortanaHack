@@ -119,9 +119,10 @@ var bot = new builder.UniversalBot(connector, [
             // sending skype card
             session.send(msg);
 
-            results.response = { emergency: true};
+            session.endDialogWithResult(({ response: true}));
+            // results.response = { emergency: true};
             
-            next();
+            // next();
         }
 
         s_res = s_res.replace("My ","")
@@ -226,13 +227,14 @@ var bot = new builder.UniversalBot(connector, [
         }
     
         
-        results.response = { emergency: false};
+        session.endDialogWithResult(({ response: false}));
+        // results.response = { emergency: false};
     
     
     },
     function (session, results)
     {
-        if(results.response.emergency)
+        if(results.response)
         {
             session.say("While we wait for EMS, I will take your vitals", "While we wait for EMS, I will take your vitals");
             // session.say(`Hi ${session.userData.name}! How are you feeling today?`, `Hi ${session.userData.name}! How are you feeling today?`);
