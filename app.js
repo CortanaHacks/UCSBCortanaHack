@@ -70,10 +70,18 @@ var bot = new builder.UniversalBot(connector, [
         if(n > 0){
             emergency = true;
         }
-        else{emergency = false;}
+        else{
+            emergency = false;
+        }
+        
         if(emergency){
-        session.send("Calling 911 and sendinng location: " + location);}
-        builder.Prompts.text(session, "What's your name?");
+            // Emergency pathway
+            session.send("Calling 911 and sendinng location: " + location);
+        }
+        else {
+            // Normal pathway
+            builder.Prompts.text(session, "What's your name?");
+        }
 },
     function(session,response){
         session.send(session.message.text);
