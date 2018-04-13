@@ -152,7 +152,7 @@ bot.dialog('vitals', [
         });
     },
     function (session, results) {
-        session.userData.vitals.bt = results.response;
+        session.dialogData.vitals.bt = results.response;
         // session.save();
         session.say(`Thank you ${session.userData.name}!`, `Thank you ${session.userData.name}!`);
         session.endDialogWithResult({ response: session.dialogData.vitals });
