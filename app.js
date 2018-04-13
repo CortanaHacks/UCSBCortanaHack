@@ -153,11 +153,12 @@ var bot = new builder.UniversalBot(connector, [
         var request = require("request");
 
         request({
-          uri: "http://www.sitepoint.com",
+          uri: fin,
         }, function(error, response, body) {
           console.log(body);
         });
 
+        
 
 
          session.send("" + arr + " " + fin)
