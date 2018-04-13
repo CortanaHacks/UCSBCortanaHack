@@ -87,7 +87,7 @@ var bot = new builder.UniversalBot(connector, [
     
         session.send(msg);
         builder.Prompts.text(session, "What's your name? " + location);
-        
+
 },
     function(session, results){
         builder.Prompts.text(session, "What are your symptoms?");
