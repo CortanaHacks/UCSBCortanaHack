@@ -36,49 +36,61 @@ var location;
 
 // Create your bot with a function to receive messages from the user
 
-var bot = new builder.UniversalBot(connector, [
-    function(session){
-        
-            if(session.message && session.message.entities){
-                var userInfo = session.message.entities.find((e) => {
-                    return e.type === 'UserInfo';
-                });
-            
-                if (userInfo) {
-                    var email = userInfo['email'];
-            
-                    if(email && email !== ''){
-                        //session.send("U Email: " + email);
-                    }
-                    var currentLocation = userInfo['current_location'];
-            
-                    if (currentLocation)
-                    {
-                        //Access the latitude and longitude values of the user's location.
-                        var lat = currentLocation.Hub.Latitude;
-                        var lon = currentLocation.Hub.Longitude;
-                        location = lat + " " + lon + " " + currentLocation.Hub.Name + " " + currentLocation.Hub.Address
-                        
-            
-                        //Do something with the user's location information.
-                    }
-                }
-            }
+// var bot = new builder.UniversalBot(connector, []);
 
-        var n = session.message.text.indexOf("911");
-        
-        if(n > 0){
-            emergency = true;
-        }
-        else{emergency = false;}
-        if(emergency){
-        session.send("Calling 911 and sendinng location: " + location);}
-        builder.Prompts.text(session, "What's your name?");
-},
-    function(session,response){
-        session.send(session.message.text);
-    
-}]);
+var userStore = [];
+var bot = new builder.UniversalBot(connector, function (session) {
+    // store user's address
+    var address = session.message.address;
+    userStore.push(address);
+
+    // end current dialog
+    session.endDialog('You\'ve been invited to a survey! It will start in a few seconds...');
+});
+
+// Every 5 seconds, check for new registered users and start a new dialog
+setInterval(function () {
+    var newAddresses = userStore.splice(0);
+    newAddresses.forEach(function (address) {
+
+        console.log('Starting survey for address:', address);
+
+        // new conversation address, copy without conversationId
+        var newConversationAddress = Object.assign({}, address);
+        delete newConversationAddress.conversation;
+
+        // start survey dialog
+        bot.beginDialog(newConversationAddress, 'survey', null, function (err) {
+            if (err) {
+                // error ocurred while starting new conversation. Channel not supported?
+                bot.send(new builder.Message()
+                    .text('This channel does not support this operation: ' + err.message)
+                    .address(address));
+            }
+        });
+
+    });
+}, 5000);
+
+bot.dialog('survey', [
+    function (session) {
+        builder.Prompts.text(session, 'Hello... What\'s your name?');
+    },
+    function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, 'Hi ' + results.response + ', How many years have you been coding?');
+    },
+    function (session, results) {
+        session.userData.coding = results.response;
+        builder.Prompts.choice(session, 'What language do you code Node using? ', ['JavaScript', 'CoffeeScript', 'TypeScript']);
+    },
+    function (session, results) {
+        session.userData.language = results.response.entity;
+        session.endDialog('Got it... ' + session.userData.name +
+            ' you\'ve been programming for ' + session.userData.coding +
+            ' years and use ' + session.userData.language + '.');
+    }
+]);
 //bot.set('storage', tableStorage);
 
 // bot.dialog('/', function (session) {
