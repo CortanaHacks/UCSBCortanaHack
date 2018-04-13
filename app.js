@@ -49,7 +49,7 @@ var bot = new builder.UniversalBot(connector, [
             "actions": [
                 {
                     "type": "Action.OpenUrl",
-                    "title": "Call 911",
+                    "title": "Location sent - call 911",
                     "url": "skype:+1234567890?call"
                 }
                      ]
@@ -85,19 +85,25 @@ var bot = new builder.UniversalBot(connector, [
             }
 
         var n = session.message.text.indexOf("911");
-        
-        if(n > 0){
+        var h = session.message.text.indexOf("emergency");
+
+        if(n > 0 || h > 0){
             emergency = true;
         }
         else{emergency = false;}
+
         if(emergency){
         session.send(msg);}
         //builder.Prompts.text(session, "What's your name? " + location);
 },
     function(session, results){
-        session.send(results.response);
-    
-}]);
+        builder.Prompts.text(session, "What are your symptoms?");
+},
+    function(session, results){
+        builder.Prompts.text(session, "What are your symptoms?");
+}
+
+]);
 //bot.set('storage', tableStorage);
 /*
 bot.dialog('/', function (session) {
