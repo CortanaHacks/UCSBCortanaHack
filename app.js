@@ -125,8 +125,22 @@ var bot = new builder.UniversalBot(connector, [
     session.send(arr)
 
     var index_of_fail = allTheCrap.indexOf(arr[0])
+
+    var i = index_of_fail;
+    var indexFound = 0;
+    var found = false;
+
+
+
     if(index_of_fail != 0){
-    session.send("" + arr + " " + allTheCrap.substring(index_of_fail-50,index_of_fail+50))
+            while(!found) {
+            if(allTheCrap.substring(i-4,i) == "href"){
+                indexFound = i;
+                found = true;
+             }
+            }
+            
+         session.send("" + arr + " " + allTheCrap.substring(indexFound,indexFound+50))
     }
     else{
         session.send("Please try again, your symptom was not understood")
