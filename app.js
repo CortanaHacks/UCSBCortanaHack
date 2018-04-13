@@ -119,17 +119,21 @@ var bot = new builder.UniversalBot(connector, [
     // split results into words, search words in string mess, and choose one to click on
     var s_res = results.response
     s_res = s_res.replace("My ","")
+    s_res = s_res.replace("my ","")
+
     var arr = s_res.split(" ")
     session.send(arr)
 
     var index_of_fail = allTheCrap.indexOf(arr[0])
-    session.send("" + arr + " " + allTheCrap.substring(index_of_fail-20,index_of_fail+20)
+    if(index_of_fail != 0){
+    session.send("" + arr + " " + allTheCrap.substring(index_of_fail-50,index_of_fail+50))
+    }
+    else{
+        session.send("Please try again, your symptom was not understood")
+    }
 
 
 
-},
-    function(session, results){
-        builder.Prompts.text(session, results);
 }
 
 ]);
