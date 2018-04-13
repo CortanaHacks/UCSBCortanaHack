@@ -42,7 +42,7 @@ var location;
 var bot = new builder.UniversalBot(connector, [
     
     // check if user has been registered
-    function (session, next) {
+    function (session, args, next) {
         var name = session.userData.name
         if(!name) {
              // initial setup
