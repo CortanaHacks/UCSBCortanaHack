@@ -58,15 +58,6 @@ var bot = new builder.UniversalBot(connector, [
 
 
 
-
-
-
-
-
-
-
-
-
             if(session.message && session.message.entities){
                 var userInfo = session.message.entities.find((e) => {
                     return e.type === 'UserInfo';
@@ -100,8 +91,8 @@ var bot = new builder.UniversalBot(connector, [
         }
         else{emergency = false;}
         if(emergency){
-        session.send("Calling 911 and sending location: " + location);}
-        builder.Prompts.text(session, "What's your name?");
+        session.send(msg);}
+        builder.Prompts.text(session, "What's your name? " + location);
 },
     function(session, results){
         session.send(results.response);
