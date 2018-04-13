@@ -31,7 +31,7 @@ server.post('/api/messages', connector.listen());
 var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
 var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azureTableClient);
-var emergency;
+var emergency = false;
 var location;
 
 // Create your bot with a function to receive messages from the user
@@ -117,12 +117,14 @@ var bot = new builder.UniversalBot(connector, [
             });
             
             // sending skype card
-            session.send(msg);
+            builder.Prompts.text(session, msg);
+            // session.send(msg);
 
-            session.endDialogWithResult(({ response: true}));
+            // session.endDialogWithResult(({ response: true}));
             // results.response = { emergency: true};
-            
-            // next();
+            emergency = true;
+
+            next();
         }
 
         s_res = s_res.replace("My ","")
@@ -227,7 +229,7 @@ var bot = new builder.UniversalBot(connector, [
         }
     
         
-        session.endDialogWithResult(({ response: false}));
+        // session.endDialogWithResult(({ response: false}));
         // results.response = { emergency: false};
     
     
