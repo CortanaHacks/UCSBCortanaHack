@@ -45,27 +45,33 @@ var bot = new builder.UniversalBot(connector, [
     function (session) {
         var name = session.userData.name
         if(name) {
-
+            session.say(`Hi ${session.userData.name}! How are you feeling today?`, `Hi ${session.userData.name}! How are you feeling today?`);
+            session.beginDialog('vitals');
             // standard user flow
             // session.say(`No survey needed ${session.userData.name}!`, `No survey needed ${session.userData.name}!`);
-            session.say(`${session.userData.name}, a ${session.userData.age} year old ${session.userData.sex} patient is suffering from a myocardial infraction. EMS
-            services are needed immediately`, `${session.userData.name}, a ${session.userData.age} year old ${session.userData.sex} patient is suffering from a myocardial infraction. EMS
-            services are needed immediately`);
+            // session.say(`${session.userData.name}, a ${session.userData.age} year old ${session.userData.sex} patient is suffering from a myocardial infraction. EMS
+            // services are needed immediately`, `${session.userData.name}, a ${session.userData.age} year old ${session.userData.sex} patient is suffering from a myocardial infraction. EMS
+            // services are needed immediately`);
 
         }
         else {
             
             // initial setup
-            session.beginDialog('setupSurvey');
+            session.beginDialog('setup');
 
         }
+    },
+    function (session, results)
+    {
+        session.beginDialog('vitals_summary');
+
     }
    
 ]).set('storage', tableStorage); // Register in-memory storage ;
 //bot.set('storage', tableStorage);
 
 // Setup survey 
-bot.dialog('setupSurvey', [
+bot.dialog('setup', [
     function (session) {
         session.say("Hi! I am Ella, your Emergency Medical Services assistant. I need to ask you a few basic questions to setup.", "Hi! I am Ella, your Emergency Medical Services assistant. I need to ask you a few basic questions to setup.");
         builder.Prompts.text(session, 'What is your name?', {                                    
@@ -92,13 +98,168 @@ bot.dialog('setupSurvey', [
     },
     function (session, results) {
         session.userData.sex = results.response;
-        session.save();
         session.say(`Thank you ${session.userData.name}!`, `Thank you ${session.userData.name}!`);
     }
 
 ])
 
+// vitals
+bot.dialog('vitals', [
+    function (session) {
+        session.say("I am going to quickly take your vitals", "I am going to quickly take your vitals");
+        builder.Prompts.number(session, 'What is heart rate?', {                                    
+            speak: 'Firstly, what is your heart rate? Say zero if you do not know',                                               
+            retrySpeak: "I'm sorry, please repeat your heart rate",  
+            inputHint: builder.InputHint.expectingInput                                              
+        });
+    },
+    function (session, results) {
+        session.dialogData.hr = results.response;
+        builder.Prompts.number(session, 'What is your systolic blood pressure?', {                                    
+            speak: 'Great, what is your systolic blood pressure? Say zero if you do not know',                                               
+            retrySpeak: "I'm sorry, please repeat your systolic blood pressure",  
+            inputHint: builder.InputHint.expectingInput                                              
+        });
+    },
+    function (session, results) {
+        session.dialogData.sp = results.response;
+        builder.Prompts.number(session, 'What is your diastolic blood pressure?', {                                    
+            speak: 'What is your diastolic blood pressure? Say zero if you do not know',                                               
+            retrySpeak: "I'm sorry, please repeat your diastolic blood pressure",  
+            inputHint: builder.InputHint.expectingInput                                              
+        });
+    },
+    function (session, results) {
+        session.dialogData.dp = results.response;
+        builder.Prompts.number(session, 'What is your respiratory rate?', {                                    
+            speak: 'What is your respiratory rate? Say zero if you do not know',                                               
+            retrySpeak: "I'm sorry, please repeat your respiratory rate",  
+            inputHint: builder.InputHint.expectingInput                                              
+        });
+    },
+    function (session, results) {
+        session.dialogData.rr = results.response;
+        builder.Prompts.number(session, 'What is your body temperature?', {                                    
+            speak: 'What is your body temperature? Say zero if you do not know',                                               
+            retrySpeak: "I'm sorry, please repeat your body temperature",  
+            inputHint: builder.InputHint.expectingInput                                              
+        });
+    },
+    function (session, results) {
+        session.userData.bt = results.response;
+        // session.save();
+        session.say(`Thank you ${session.userData.name}!`, `Thank you ${session.userData.name}!`).endDialog();
+    }
 
+])
+
+// summarizes vitals
+bot.dialog('vitals_summary', [
+    function (session) {
+        var summary = `This an automated message. Patient is a ${session.userData.age} year old ${session.userData.sex} suffereing from a medical emergency.`
+        
+        // hear rate
+        summary += " His heart rate is ";
+        if(session.dialogData.hr >= 160)
+        {
+            summary += "tachycardic. ";
+        }
+        else if(session.dialogData.hr > 100 && session.userData.hr < 160)
+        {
+            summary += "slightly tachycardic. ";
+
+        }
+        else if(session.dialogData.hr >= 60 && session.userData.hr < 101)
+        {
+            summary += "normal. ";
+        }
+        else if(session.dialogData.hr > 40 && session.userData.hr < 60)
+        {
+            summary += "slightly bradycardic. ";
+
+        }
+        else if(session.dialogData.hr > 20 && session.userData.hr < 41)
+        {
+            summary += "slightly bradycardic. ";
+
+        }
+        else 
+        {
+            summary += "unknown. ";
+
+        }
+
+        // blood pressure
+        summary += " He ";
+        if(session.dialogData.sp >= 140 || session.dialogData.dp >= 90)
+        {
+            summary += "is hypertensive ";
+        }
+        else if(session.userData.sp > 90 && session.userData.sp < 140)
+        {
+            summary += "has normal blood pressure ";
+
+        }
+        else if(session.userData.sp >= 60 && session.userData.sp < 90)
+        {
+            summary += "is hypotensive ";
+        }
+        else if(session.userData.sp > 0 && session.userData.sp < 60)
+        {
+            summary += "is extremely hypotensive ";
+
+        }
+        else 
+        {
+            summary += "has unknown blood pressure ";
+
+        }
+
+        // respiratory rate
+        summary += " and he ";
+        if(session.dialogData.rr >= 32)
+        {
+            summary += "has a high respiratory rate and may be in respiratory distress. ";
+        }
+        else if(session.dialogData.rr > 8 && session.dialogData.rr < 32)
+        {
+            summary += "has a normal respiratory rate. ";
+
+        }
+        else if(session.dialogData.rr > 0 && session.dialogData.rr < 8)
+        {
+            summary += "has a low respiratory rate and may be in respiratory distress. ";
+        }
+        else 
+        {
+            summary += "has unknown respiratory rate. ";
+
+        }
+
+        // body temperature
+        summary += " He ";
+        if(session.dialogData.bt >= 99)
+        {
+            summary += "also may be febrile based on his body temperature. ";
+        }
+        else if(session.dialogData.bt > 98 && session.dialogData.bt < 99)
+        {
+            summary += "also has a normal body temperature. ";
+
+        }
+        else if(session.dialogData.bt > 0 && session.dialogData.bt < 98)
+        {
+            summary += "also has a low body temperature. ";
+        }
+        else 
+        {
+            summary += "has unknown body temperature. ";
+
+        }
+
+        session.say(summary, summary).endDialog();
+    }
+])
 
 // bot.dialog('/', function (session) {
 //     session.send('You said ' + session.message.text);
