@@ -116,7 +116,15 @@ var bot = new builder.UniversalBot(connector, [
         
 },
     function(session, results){
-        builder.Prompts.text(session, "What are your symptoms?");
+    // split results into words, search words in string mess, and choose one to click on
+    results = results.replace("My","")
+    var arr = results.split(" ")
+    session.send(arr)
+
+    var index_of_fail = allTheCrap.indexOf(arr[0])
+    session.send("" + arr + " " + index_of_fail)
+
+
 },
     function(session, results){
         builder.Prompts.text(session, results);
