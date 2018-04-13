@@ -118,7 +118,7 @@ var bot = new builder.UniversalBot(connector, [
     function(session, results){
     // split results into words, search words in string mess, and choose one to click on
     var s_res = results.response
-    s_res = s_res.replace("My","")
+    s_res = s_res.replace("My ","")
     var arr = s_res.split(" ")
     session.send(arr)
 
