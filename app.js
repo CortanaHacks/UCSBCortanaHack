@@ -38,7 +38,35 @@ var location;
 
 var bot = new builder.UniversalBot(connector, [
     function(session){
-        
+        // Define adaptive card message
+        var msg = new builder.Message(session)
+        .addAttachment({
+            contentType: "application/vnd.microsoft.card.adaptive",
+            content: {
+                    "type": "AdaptiveCard",
+            "version": "1.0",
+            "body": [],
+            "actions": [
+                {
+                    "type": "Action.OpenUrl",
+                    "title": "Call 911",
+                    "url": "skype:+1234567890?call"
+                }
+                     ]
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
             if(session.message && session.message.entities){
                 var userInfo = session.message.entities.find((e) => {
                     return e.type === 'UserInfo';
@@ -72,15 +100,16 @@ var bot = new builder.UniversalBot(connector, [
         }
         else{emergency = false;}
         if(emergency){
-        session.send("Calling 911 and sendinng location: " + location);}
+        session.send("Calling 911 and sending location: " + location);}
         builder.Prompts.text(session, "What's your name?");
 },
-    function(session,response){
-        session.send(session.message.text);
+    function(session, results){
+        session.send(results.response);
     
 }]);
 //bot.set('storage', tableStorage);
-
+/*
 bot.dialog('/', function (session) {
     session.send('You said ' + session.message.text);
 });
+*/
