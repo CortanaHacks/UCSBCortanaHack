@@ -146,9 +146,9 @@ var bot = new builder.UniversalBot(connector, [
             var temp = allTheCrap.substring(indexFound,indexFound+300)
             var indexOfEnd = temp.indexOf("'>")
             var fin = temp.substring(2,indexOfEnd)
-            fin = fin.replace("single-symptom?symptom","multiple-symptoms?symptoms")
+            fin = fin.replace("single-symptom?symptom","https://symptomchecker.webmd.com/multiple-symptoms?symptoms")
             fin = fin.replace("symid","symptomids") 
-            fin = fin.replace("loc", "location")
+            fin = fin.replace("loc", "locations")
 
 
          session.send("" + arr + " " + fin)
