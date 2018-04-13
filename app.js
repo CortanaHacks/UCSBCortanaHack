@@ -156,7 +156,7 @@ bot.dialog('vitals', [
 // summarizes vitals
 bot.dialog('vitals_summary', [
     function (session) {
-        var summary = `This an automated message. Patient is a ${session.userData.age} year old ${session.userData.sex} suffereing from a medical emergency.`
+        var summary = `This an automated message. Patient is a ${session.userData.age} year old ${session.userData.sex} suffering from a medical emergency.`
         
         // hear rate
         summary += " His heart rate is ";
