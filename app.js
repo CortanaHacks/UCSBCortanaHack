@@ -142,7 +142,12 @@ var bot = new builder.UniversalBot(connector, [
              console.log("Not understood")
             }
 
-         session.send("" + arr + " " + allTheCrap.substring(indexFound,indexFound+50))
+
+            var temp = allTheCrap.substring(indexFound,indexFound+300)
+            var indexOfEnd = temp.indexOf("'>")
+            var fin = temp.substring(0,indexOfEnd)
+
+         session.send("" + arr + " " + fin)
     }
     else{
         session.send("Please try again, your symptom was not understood")
