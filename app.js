@@ -92,7 +92,7 @@ var bot = new builder.UniversalBot(connector, [
         else{emergency = false;}
         if(emergency){
         session.send(msg);}
-        builder.Prompts.text(session, "What's your name? " + location);
+        //builder.Prompts.text(session, "What's your name? " + location);
 },
     function(session, results){
         session.send(results.response);
