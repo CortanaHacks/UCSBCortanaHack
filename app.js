@@ -236,7 +236,7 @@ var bot = new builder.UniversalBot(connector, [
     },
     function (session, results)
     {
-        if(results.response)
+        if(emergency)
         {
             session.say("While we wait for EMS, I will take your vitals", "While we wait for EMS, I will take your vitals");
             // session.say(`Hi ${session.userData.name}! How are you feeling today?`, `Hi ${session.userData.name}! How are you feeling today?`);
