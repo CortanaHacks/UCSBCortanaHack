@@ -119,7 +119,7 @@ var bot = new builder.UniversalBot(connector, [
             // sending skype card
             session.send(msg);
 
-            results.reponse = { emergency: true};
+            results.response = { emergency: true};
             
             next();
         }
@@ -226,7 +226,7 @@ var bot = new builder.UniversalBot(connector, [
         }
     
         
-        results.reponse = { emergency: false};
+        results.response = { emergency: false};
     
     
     },
