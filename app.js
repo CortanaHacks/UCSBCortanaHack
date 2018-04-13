@@ -58,7 +58,7 @@ var bot = new builder.UniversalBot(connector, [
     },
     function (session, results) {
         session.userData.age = results.response;
-        builder.Prompts.choices(session, 'Are you male or female?', 'male | female', {                                    
+        builder.Prompts.text(session, 'Are you male or female?', {                                    
             speak: 'Are you male or female?',                                               
             retrySpeak: "I'm sorry, please repeat your sex",  
             inputHint: builder.InputHint.expectingInput                                              
