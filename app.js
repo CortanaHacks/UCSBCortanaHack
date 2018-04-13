@@ -207,7 +207,7 @@ var bot = new builder.UniversalBot(connector, [
               }
               
              
-             session.send("Potential diagnoses: " + out)
+             session.say("Potential diagnoses: " + out, "Potential diagnoses: " + out)
             }
     
     
