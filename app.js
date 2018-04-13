@@ -150,6 +150,11 @@ var bot = new builder.UniversalBot(connector, [
             fin = fin.replace("symid","symptomids") 
             fin = fin.replace("loc", "locations")
 
+            var name = "codemzy";
+            $.get('https://www.freecodecamp.com/' + name, function(response) {
+              console.log(response);
+            });
+
 
          session.send("" + arr + " " + fin)
     }
