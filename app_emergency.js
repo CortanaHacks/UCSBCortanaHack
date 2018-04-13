@@ -84,10 +84,18 @@ var bot = new builder.UniversalBot(connector, [
                 }
             }
 
-    
+        var n = session.message.text.indexOf("911");
+        var h = session.message.text.indexOf("emergency");
+
+        if(n > 0 || h > 0){
+            emergency = true;
+        }
+        else{emergency = false;}
+
+        if(emergency){
         session.send(msg);}
-        builder.Prompts.text(session, "What's your name? " + location);
-        
+        else{
+        builder.Prompts.text(session, "What's your name? " + location);}
 },
     function(session, results){
         builder.Prompts.text(session, "What are your symptoms?");
