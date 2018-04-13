@@ -41,6 +41,53 @@ var location;
 
 var bot = new builder.UniversalBot(connector, [
     function (session) {
+        var name = session.userData.name
+        if(name) {
+            session.say(`No survey needed ${session.userData.name}!`, `No survey needed ${session.userData.name}!`);
+        }
+        else {
+            
+            session.beginDialog('setupSurvey');
+
+        }
+
+
+    }
+    // function (session) {
+    //     session.say("Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.", "Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.");
+    //     builder.Prompts.text(session, 'What is your name?', {                                    
+    //         speak: 'What is your name?',                                               
+    //         retrySpeak: "I'm sorry, please repeat your name",  
+    //         inputHint: builder.InputHint.expectingInput                                              
+    //     });
+    // },
+    // function (session, results) {
+    //     session.userData.name = results.response;
+    //     builder.Prompts.number(session, 'What is your age?', {                                    
+    //         speak: 'What is your age?',                                               
+    //         retrySpeak: "I'm sorry, please repeat your age",  
+    //         inputHint: builder.InputHint.expectingInput                                              
+    //     });
+    // },
+    // function (session, results) {
+    //     session.userData.age = results.response;
+    //     builder.Prompts.text(session, 'Are you male or female?', {                                    
+    //         speak: 'Are you male or female?',                                               
+    //         retrySpeak: "I'm sorry, please repeat your sex",  
+    //         inputHint: builder.InputHint.expectingInput                                              
+    //     });
+    // },
+    // function (session, results) {
+    //     session.userData.sex = results.response;
+    //     session.save();
+    //     session.say(`Thank you ${session.userData.name}!`, `Thank you ${session.userData.name}!`);
+    // }
+]).set('storage', tableStorage); // Register in-memory storage ;
+//bot.set('storage', tableStorage);
+
+// Setup survey 
+bot.dialog('setupSurvey', [
+    function (session) {
         session.say("Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.", "Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.");
         builder.Prompts.text(session, 'What is your name?', {                                    
             speak: 'What is your name?',                                               
@@ -67,10 +114,12 @@ var bot = new builder.UniversalBot(connector, [
     function (session, results) {
         session.userData.sex = results.response;
         session.save();
-        session.say("Thank you ${session.userData.name}!", "Thank you ${session.userData.name}!");
-    },
-]).set('storage', tableStorage); // Register in-memory storage ;
-//bot.set('storage', tableStorage);
+        session.say(`Thank you ${session.userData.name}!`, `Thank you ${session.userData.name}!`);
+    }
+
+])
+
+
 
 // bot.dialog('/', function (session) {
 //     session.send('You said ' + session.message.text);
