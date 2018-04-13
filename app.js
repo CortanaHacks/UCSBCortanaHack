@@ -46,7 +46,7 @@ var bot = new builder.UniversalBot(connector, [
         if(name) {
             // session.say(`No survey needed ${session.userData.name}!`, `No survey needed ${session.userData.name}!`);
             // session.say(`No survey needed ${session.userData.name}!`, `No survey needed ${session.userData.name}!`);
-            sesson.say(`${session.userData.name}, a ${session.userData.age}! year old ${session.userData.sex}! patient is suffering from a myocardial infraction. EMS
+            session.say(`${session.userData.name}, a ${session.userData.age} year old ${session.userData.sex} patient is suffering from a myocardial infraction. EMS
             services is needed immediately`);
 
         }
