@@ -40,19 +40,22 @@ var location;
 // var inMemoryStorage = new builder.MemoryBotStorage();
 
 var bot = new builder.UniversalBot(connector, [
+    
+    // check if user has been registered
     function (session) {
-        // check if user has been registered
         var name = session.userData.name
         if(name) {
-            // session.say(`No survey needed ${session.userData.name}!`, `No survey needed ${session.userData.name}!`);
+
+            // standard user flow
             // session.say(`No survey needed ${session.userData.name}!`, `No survey needed ${session.userData.name}!`);
             session.say(`${session.userData.name}, a ${session.userData.age} year old ${session.userData.sex} patient is suffering from a myocardial infraction. EMS
-            services is needed immediately`, `${session.userData.name}, a ${session.userData.age} year old ${session.userData.sex} patient is suffering from a myocardial infraction. EMS
-            services is needed immediately`);
+            services are needed immediately`, `${session.userData.name}, a ${session.userData.age} year old ${session.userData.sex} patient is suffering from a myocardial infraction. EMS
+            services are needed immediately`);
 
         }
         else {
             
+            // initial setup
             session.beginDialog('setupSurvey');
 
         }
@@ -64,7 +67,7 @@ var bot = new builder.UniversalBot(connector, [
 // Setup survey 
 bot.dialog('setupSurvey', [
     function (session) {
-        session.say("Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.", "Hi! I am Ella, your EMS assistant. I need to ask you a few basic questions to setup.");
+        session.say("Hi! I am Ella, your Emergency Medical Services assistant. I need to ask you a few basic questions to setup.", "Hi! I am Ella, your Emergency Medical Services assistant. I need to ask you a few basic questions to setup.");
         builder.Prompts.text(session, 'What is your name?', {                                    
             speak: 'What is your name?',                                               
             retrySpeak: "I'm sorry, please repeat your name",  
@@ -74,7 +77,7 @@ bot.dialog('setupSurvey', [
     function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, 'What is your age?', {                                    
-            speak: 'What is your age?',                                               
+            speak: 'Great! What is your age?',                                               
             retrySpeak: "I'm sorry, please repeat your age",  
             inputHint: builder.InputHint.expectingInput                                              
         });
