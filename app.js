@@ -149,19 +149,71 @@ var bot = new builder.UniversalBot(connector, [
             fin = fin.replace("single-symptom?symptom","https://symptomchecker.webmd.com/multiple-symptoms?symptoms")
             fin = fin.replace("symid","symptomids") 
             fin = fin.replace("loc", "locations")
+            fin = fin.replace("&amp;", "&");
+            fin = fin.replace("&amp;", "&");
+            //fin = fin + "?";
 
         var request = require("request");
-
+        var bodyFinal = "";
+        var body2;
+        var index_sympt = -1;
+        /*
         request({
           uri: fin,
         }, function(error, response, body) {
-          console.log(body);
-        });
-
+            
+        bodyFinal = body.replace(/"/g, "'");      
+        console.log(bodyFinal);
+        });*/
         
+        function ru(bod2){
+         bod2 = bod2.replace(/"/g, "'");      
+         console.log(fin)
+         console.log("https://symptomchecker.webmd.com/multiple-symptoms?symptoms=stomach-cramps&symptomids=585&locations=20")
+         index_sympt = bod2.indexOf("related_conditions")
+         var en = bod2.substring(index_sympt,index_sympt+5000).indexOf("                                                <!-- End Body -->")
+
+         var relevant = bod2.substring(index_sympt, index_sympt + en)
+         var indices = [];
+         
+         for(var o=0; o<relevant.length; o++) {
+            if (relevant.substring(o,o+4) == "</a>") indices.push(o);
+          }
+          console.log(indices)
+         var indiBeg = []
+         for(var o=0; o<indices.length; o++) {
+             for(var x=0; x<relevant.substring(indices[o]-50,indices[o]).length; x++) {
+                if (relevant.substring(indices[o]-50,indices[o]).substring(x,x+1) == ">") indiBeg.push(x);
+              }
+          }
+          console.log(indiBeg)
+          var potential = []
+          
+          for(var o=0; o<indices.length; o++) {
+              potential.push(  relevant.substring(indices[o]-50 + indiBeg[o],indices[o]).replace(">","")  )
+          }
+          console.log(potential)
+          var out = ""
+          for(var o=0; o<potential.length; o++) {
+              out = out + "\n" + potential[o]
+              
+              
+          }
+          
+         
+         session.send("Potential diagnoses: " + out)
+        }
 
 
-         session.send("" + arr + " " + fin)
+        var bod3;
+        return new Promise(resolve => {
+           request(fin, function (error, response, body) {
+              //console.log(body);
+                ru(body)        
+           });
+        })
+
+
     }
     else{
         session.send("Please try again, your symptom was not understood")
