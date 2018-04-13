@@ -37,7 +37,7 @@ var location;
 // Create your bot with a function to receive messages from the user
 
 // var bot = new builder.UniversalBot(connector, []);
-var inMemoryStorage = new builder.MemoryBotStorage();
+// var inMemoryStorage = new builder.MemoryBotStorage();
 
 var bot = new builder.UniversalBot(connector, [
     function (session) {
@@ -50,9 +50,26 @@ var bot = new builder.UniversalBot(connector, [
     },
     function (session, results) {
         session.userData.name = results.response;
+        builder.Prompts.number(session, 'What is your age?', {                                    
+            speak: 'What is your age?',                                               
+            retrySpeak: "I'm sorry, please repeat your age",  
+            inputHint: builder.InputHint.expectingInput                                              
+        });
+    },
+    function (session, results) {
+        session.userData.age = results.response;
+        builder.Prompts.choices(session, 'Are you male or female?', 'male | female', {                                    
+            speak: 'Are you male or female?',                                               
+            retrySpeak: "I'm sorry, please repeat your sex",  
+            inputHint: builder.InputHint.expectingInput                                              
+        });
+    },
+    function (session, results) {
+        session.userData.sex = results.response;
         session.save();
-    }
-]).set('storage', inMemoryStorage); // Register in-memory storage ;
+        session.say("Thank you ${session.userData.name}!", "Thank you ${session.userData.name}!");
+    },
+]).set('storage', tableStorage); // Register in-memory storage ;
 //bot.set('storage', tableStorage);
 
 // bot.dialog('/', function (session) {
